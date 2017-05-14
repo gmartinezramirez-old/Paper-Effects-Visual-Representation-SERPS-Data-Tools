@@ -28,15 +28,23 @@ def writeResultados(INFile):
                     writeToCSVResultados(lineTR)
             csvfile.seek(0)
 
-def writeContenidos(matrixValues):
+def writeContenidos(CSVstored):
+    """Separate in.csv into contenidos file.
+    
+    Args:
+        CSVStored: CSV file stored in memory.
+
+    Returns:
+        Call function to write in a CSV file.
+    """
     print "Write to contenidos.txt"
-    CSVfilename = "Tr.txt" # Archivo logs
+    CSVfilename = "Tr.txt"
     with open(CSVfilename, 'rb') as csvfile:
         readCSV = csv.reader(csvfile, delimiter=' ')
-        for listValues in matrixValues:
+        for listValues in CSVStored:
             print listValues
             idUser = int(listValues[0])
-            startTime = float(listValues[1]) #antes row[2], ahora row[1]
+            startTime = float(listValues[1])
             endTime = float(listValues[2])
             for row in readCSV:
                  if (idUser == int(row[1]) and not
@@ -45,20 +53,35 @@ def writeContenidos(matrixValues):
                     writeToCSVContenidos(row)
             csvfile.seek(0)
 
-def writeMatrixPermanency():
-    CSVfilename = "in.csv" # Archivo permanencia: in.csv
-    with open(CSVfilename, 'rb') as csvfile:
+def writeCSVtoMemory(CSVFile):
+    """Read CSV file and store in memory. The resulting content is:
+        row[0]: User ID
+        row[1]: Session ID
+        row[2]: Start timestamp
+        row[3]: End timestamp
+    
+    Args:
+        CSVFile: string of the filename.
+
+    Returns:
+        CSV stored in a variable.
+
+    Raises:
+        FileError: if CSVFile path dont found.
+
+    """
+    with open(CSVfile, 'rb') as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
-        # row[0]: User ID
-        # row[1]: Session ID
-        # row[2]: Start timestamp
-        # row[3]: End timestamp
         matrixValues = list(readCSV)
-    return matrixValues
+    return CSVContent
 
 def main():
-    matrixValues = writeMatrixPermanency()
-    writeResultados(matrixValues)
+    """
+    Call functions to write CSV to memory and process it.
+    """
+    CSVFile = "in.csv"
+    CSVContent = writeCSVtoMemory(CSVFile)
+    writeResultados(CSVContent)
 
 if __name__ == '__main__':
     main()

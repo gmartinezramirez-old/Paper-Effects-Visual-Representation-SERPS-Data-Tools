@@ -13,11 +13,11 @@ def writeToCsvFile(filename, ts, time, x, y,  leftEyepSize, rightEyepSize, difer
 def processFile(filename):
     lastUserTime = 0
     with open(filename) as file:
-        print "Procesando " + str(filename)
+        print "Processing: " + str(filename)
         for line in file:
             json_data = json.loads(line)
-            if (json_data["category"]== "tracker"):
-                if(json_data["values"]["frame"]["fix"] == True):
+            if json_data["category"] == "tracker":
+                if json_data["values"]["frame"]["fix"] == True:
                     ts = json_data["values"]["frame"]["timestamp"]
                     time = json_data["values"]["frame"]["time"]
                     x = json_data["values"]["frame"]["avg"]["x"]
@@ -34,7 +34,7 @@ def processFile(filename):
 
 def processInvertedFile(filename):
     lastUserTime = 0
-    print "Procesando " + str(filename)
+    print "Processing: " + str(filename)
     for line in reversed(open(filename).readlines()):
         json_data = json.loads(line)
         if (json_data["category"]== "tracker"):
@@ -55,13 +55,12 @@ def processInvertedFile(filename):
 
 def main():
     currentDir = os.getcwd()
-    print "Directorio actual: " + str(currentDir)
+    print "Current working dir: " + str(currentDir)
     for filename in os.listdir(currentDir):
         if ".json" in filename:
             processInvertedFile(filename)
         else:
-            print str(filename) + " no se puede procesar"
+            print str(filename) + " cant be process"
 
-  
 if __name__ == "__main__":
     main()
